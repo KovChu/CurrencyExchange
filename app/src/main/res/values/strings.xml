@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">CurrencyExchange</string>
+    <string name="activity_list_name">Currency List</string>
+    <string name="activity_quote_name">Currency Quotes</string>
     <string name="txt_loading_error">Error while loading data</string>
     <string name="btn_retry">Retry</string>
 </resources>

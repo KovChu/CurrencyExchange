@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_4">4dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
+    <dimen name="currency_name_size">16sp</dimen>
+    <dimen name="currency_quote_size">20sp</dimen>
+    <dimen name="item_minimum_height">64dp</dimen>
+</resources>
