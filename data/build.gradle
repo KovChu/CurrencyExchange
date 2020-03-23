@@ -1,9 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-
-def final CurrencyLayerAPIKey = "5f9a0ee51e88827fb5d0f4d4ef57349a"
-def final BaseURL = "http://api.currencylayer.com/"
 
 android {
     compileSdkVersion 28
@@ -24,11 +22,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled true
+        }
     }
 
     buildTypes.each {
-        it.buildConfigField 'String', 'CurrencyLayerAPIKey', CurrencyLayerAPIKey
-        it.buildConfigField 'String', 'BaseURL', BaseURL
+        it.buildConfigField "String", "CurrencyLayerAPIKey", '"5f9a0ee51e88827fb5d0f4d4ef57349a"'
+        it.buildConfigField "String", "BaseURL", '"http://api.currencylayer.com/"'
     }
 
 }
@@ -43,4 +44,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$versions.retrofitRxjava"
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:$versions.dagger2"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger2"
 }

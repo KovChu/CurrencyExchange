@@ -21,6 +21,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    dependencies {
+    }
 
     dataBinding {
         enabled = true
@@ -44,6 +46,9 @@ dependencies {
 
     // data binding
     kapt "com.android.databinding:compiler:$versions.dataBinding"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
 
     // rx
     implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
