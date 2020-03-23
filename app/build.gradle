@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -22,37 +22,38 @@ android {
         }
     }
 
-    viewBinding {
+    dataBinding {
         enabled = true
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
     implementation "androidx.core:core-ktx:$versions.core_ktx"
-    
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
-    
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle_ktx"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle_ktx"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle_ktx"
+
     implementation "androidx.fragment:fragment-ktx:$versions.fragment_ktx"
 
-    implementation "androidx.navigation:navigation-runtime-ktx:$versions.navigation_ktx"
-    implementation "androidx.navigation:navigation-fragment-ktx:$versions.navigation_ktx"
-    implementation "androidx.navigation:navigation-ui-ktx:$versions.navigation_ktx"
-
-
+    //androidx support libraries
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
-
-    //koin
-    implementation "org.koin:koin-core:$versions.koin"
-    implementation "org.koin:koin-android-scope:$versions.koin"
-    implementation "org.koin:koin-android-viewmodel:$versions.koin"
-
+    implementation "androidx.recyclerview:recyclerview:$versions.recyclerView"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+    implementation "com.google.android.material:material:$versions.material"
+    implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
 
+    // data binding
+    kapt "com.android.databinding:compiler:$versions.dataBinding"
+
+    // rx
+    implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+    implementation "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:$versions.dagger2"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger2"
+
+    //test
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test:runner:$versions.runner"
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.expresso_core"

@@ -39,7 +39,8 @@ dependencies {
     testImplementation "junit:junit:$versions.junit"
     androidTestImplementation "androidx.test.ext:junit:$versions.ext_junit"
 
-    implementation "androidx.room:room-ktx:$versions.room_ktx"
-
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$versions.retrofitRxjava"
 }

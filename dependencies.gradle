@@ -2,23 +2,27 @@ def versions= [:]
 
 versions.kotlin = "1.3.61"
 versions.coroutines = "1.3.5"
-//koin
-versions.koin = "1.0.2"
+versions.core_ktx = '1.2.0'
 
 //junit
 versions.junit = "4.12"
 versions.ext_junit = "1.1.1"
 
 versions.appcompat = "1.1.0"
-
-versions.core_ktx = "1.2.0"
-
-versions.constraintlayout = "1.1.3"
-
 versions.fragment_ktx = "1.2.3"
-versions.lifecycle_ktx = "2.2.0"
-versions.navigation_ktx = "2.2.1"
-versions.room_ktx = "2.2.5"
+versions.recyclerView = '1.1.0'
+versions.constraintlayout = "1.1.3"
+versions.material = '1.1.0'
+versions.lifecycle = '1.1.1'
+
+versions.dataBinding = '3.1.4'
+
+versions.dagger2 = '2.16'
+versions.rxjava2 = '2.1.9'
+versions.rxandroid = '2.1.1'
+
+versions.retrofit = '2.5.0'
+versions.retrofitRxjava = '1.0.0'
 
 //test
 versions.runner = "1.2.0"
