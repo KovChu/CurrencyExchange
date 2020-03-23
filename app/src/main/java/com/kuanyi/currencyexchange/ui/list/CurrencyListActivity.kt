@@ -59,7 +59,6 @@ class CurrencyListActivity : AppCompatActivity() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
 
-
         adapter.onItemClick = { currency ->
 
             // do something with your item

@@ -13,7 +13,7 @@ class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyLis
 
     var onItemClick: ((CurrencyModel) -> Unit)? = null
 
-    private var quoteInput: Double = -1.0
+    var quoteInput: Double = -1.0
         set(value) {
             //only support set that is positive
             if (value > 0.0) {
