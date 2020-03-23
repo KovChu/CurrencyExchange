@@ -1,17 +1,14 @@
-package com.kuanyi.currencyexchange.ui.adapter
+package com.kuanyi.currencyexchange.ui.quote
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kuanyi.currencyexchange.databinding.ItemCurrencyBinding
 import com.kuanyi.data.model.CurrencyModel
 
-class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyListViewHolder>() {
+class CurrencyQuoteAdapter : RecyclerView.Adapter<CurrencyQuoteAdapter.CurrencyQuoteViewHolder>() {
 
     private var currencies: List<CurrencyModel> = emptyList()
-
-    var onItemClick: ((CurrencyModel) -> Unit)? = null
 
     var quoteInput: Double = -1.0
         set(value) {
@@ -27,22 +24,20 @@ class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyLis
         notifyDataSetChanged()
     }
 
-
     override fun getItemCount(): Int {
         return currencies.size
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyListViewHolder {
-        return CurrencyListViewHolder(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyQuoteViewHolder {
+        return CurrencyQuoteViewHolder(parent)
     }
 
-    override fun onBindViewHolder(holder: CurrencyListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CurrencyQuoteViewHolder, position: Int) {
         holder.bind(currencies[position])
     }
 
 
-    inner class CurrencyListViewHolder(
+    inner class CurrencyQuoteViewHolder(
         private val parent: ViewGroup,
         private val binding: ItemCurrencyBinding = ItemCurrencyBinding.inflate(
             LayoutInflater.from(
@@ -51,22 +46,10 @@ class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyLis
         )
     ) : RecyclerView.ViewHolder(binding.root) {
 
-
-
-        init {
-            itemView.setOnClickListener {
-                onItemClick?.invoke(currencies[adapterPosition])
-            }
-        }
-
         fun bind(item: CurrencyModel) {
             binding.currency = item
-            if (quoteInput > 0.0) {
-                binding.txtQuote.visibility = View.VISIBLE
-                binding.txtQuote.text = "%.2f".format(item.rate * quoteInput)
-            } else {
-                binding.txtQuote.visibility = View.GONE
-            }
+            binding.txtQuote.text = "%.2f".format(item.rate * quoteInput)
+            binding.txtName.text = item.abbr
             binding.executePendingBindings()
         }
 

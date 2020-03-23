@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.currencyexchange.databinding.ActivityCurrencyQuoteBinding
-import com.kuanyi.currencyexchange.ui.adapter.CurrencyListAdapter
 import com.kuanyi.currencyexchange.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_currency_list.*
 import kotlinx.android.synthetic.main.activity_currency_list.progressBar
@@ -25,13 +24,13 @@ import kotlinx.android.synthetic.main.activity_currency_quote.*
 
 
 //save instance state for edittext
-//convert amount
 class CurrencyQuoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCurrencyQuoteBinding
     private lateinit var viewModel: CurrencyQuoteViewModel
 
-    private var adapter = CurrencyListAdapter()
+    private var adapter =
+        CurrencyQuoteAdapter()
 
     companion object {
         val EXTRA_CURRENCY = "EXTRA_CURRENCY"
@@ -100,7 +99,6 @@ class CurrencyQuoteActivity : AppCompatActivity() {
             viewModel.loadCurrencyList()
         })
     }
-
 
     private inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
         object : ViewModelProvider.Factory {

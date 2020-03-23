@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.currencyexchange.databinding.ActivityCurrencyListBinding
-import com.kuanyi.currencyexchange.ui.adapter.CurrencyListAdapter
 import com.kuanyi.currencyexchange.ui.quote.CurrencyQuoteActivity
 import com.kuanyi.currencyexchange.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_currency_list.*
@@ -25,7 +24,8 @@ class CurrencyListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCurrencyListBinding
     private lateinit var viewModel: CurrencyListViewModel
 
-    private var adapter = CurrencyListAdapter()
+    private var adapter =
+        CurrencyListAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
