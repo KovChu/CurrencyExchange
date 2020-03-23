@@ -12,7 +12,6 @@ data class CurrencyList(
     fun toCurrencyModelList() : List<CurrencyModel> {
         val currencyList = mutableListOf<CurrencyModel>()
         for (abbr in currencies.keySet()) {
-//            Log.i("data", currencies.get(abbr).toString())
             currencyList.add(CurrencyModel(abbr, currencies.get(abbr).asString))
         }
             return currencyList

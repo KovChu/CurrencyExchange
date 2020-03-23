@@ -4,4 +4,7 @@
     <string name="activity_quote_name">Currency Quotes</string>
     <string name="txt_loading_error">Error while loading data</string>
     <string name="btn_retry">Retry</string>
+    <string name="txt_quote_amount" formatted="false">"For %1$.2f %2$s, you can exchange for… "</string>
+    <string name="default_amount" translatable="false">1.00</string>
+
 </resources>

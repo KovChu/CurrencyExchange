@@ -1,6 +1,7 @@
 package com.kuanyi.currencyexchange.component
 
 import com.kuanyi.currencyexchange.ui.list.CurrencyListViewModel
+import com.kuanyi.currencyexchange.ui.quote.CurrencyQuoteViewModel
 import com.kuanyi.data.module.NetworkModule
 import dagger.Component
 import javax.inject.Singleton
@@ -10,8 +11,8 @@ import javax.inject.Singleton
 interface ViewModelComponent {
 
     fun inject(currencyListViewModel: CurrencyListViewModel)
-//
-//    fun inject(productListViewModel: ProductListViewModel)
+
+    fun inject(currencyQuoteViewModel: CurrencyQuoteViewModel)
 
     @Component.Builder
     interface Builder {

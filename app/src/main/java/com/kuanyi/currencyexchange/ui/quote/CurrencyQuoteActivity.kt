@@ -1,38 +1,54 @@
-package com.kuanyi.currencyexchange.ui.list
+package com.kuanyi.currencyexchange.ui.quote
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
-import com.kuanyi.currencyexchange.databinding.ActivityCurrencyListBinding
+import com.kuanyi.currencyexchange.databinding.ActivityCurrencyQuoteBinding
 import com.kuanyi.currencyexchange.ui.adapter.CurrencyListAdapter
-import com.kuanyi.currencyexchange.ui.quote.CurrencyQuoteActivity
 import com.kuanyi.currencyexchange.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_currency_list.*
+import kotlinx.android.synthetic.main.activity_currency_list.progressBar
+import kotlinx.android.synthetic.main.activity_currency_list.recyclerView
+import kotlinx.android.synthetic.main.activity_currency_quote.*
 
 
-class CurrencyListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCurrencyListBinding
-    private lateinit var viewModel: CurrencyListViewModel
+//save instance state for edittext
+//convert amount
+class CurrencyQuoteActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityCurrencyQuoteBinding
+    private lateinit var viewModel: CurrencyQuoteViewModel
 
     private var adapter = CurrencyListAdapter()
+
+    companion object {
+        val EXTRA_CURRENCY = "EXTRA_CURRENCY"
+    }
+
+    private lateinit var currency: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency_list)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_currency_list)
-        viewModel = ViewModelProviders.of(this).get(CurrencyListViewModel::class.java)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_currency_quote)
+        currency = intent.getStringExtra(EXTRA_CURRENCY)
+        viewModel =
+            ViewModelProviders.of(this, viewModelFactory { CurrencyQuoteViewModel(currency) })
+                .get(CurrencyQuoteViewModel::class.java)
         binding.viewModel = viewModel
 
         viewModel.loadingStatus.observe(this, Observer {
@@ -50,7 +66,9 @@ class CurrencyListActivity : AppCompatActivity() {
 
         viewModel.currencyList.observe(this, Observer {
             adapter.setCurrencyList(it)
+            displayAmount(editAmount.text.toString().toDouble())
         })
+
         recyclerView.addItemDecoration(
             DividerItemDecoration(
                 this,
@@ -61,12 +79,19 @@ class CurrencyListActivity : AppCompatActivity() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
 
-        adapter.onItemClick = { currency ->
-            Log.d("data", currency.abbr)
-            val intent = Intent(this, CurrencyQuoteActivity::class.java)
-            intent.putExtra(CurrencyQuoteActivity.EXTRA_CURRENCY, currency.abbr)
-            startActivity(intent)
+        editAmount.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                displayAmount(editAmount.text.toString().toDouble())
+                true
+            } else {
+                false
+            }
         }
+    }
+
+    fun displayAmount(amount: Double) {
+        txtQuoteHint.text = String.format(getString(R.string.txt_quote_amount), amount, currency)
+        adapter.quoteInput = amount
     }
 
 
@@ -75,4 +100,10 @@ class CurrencyListActivity : AppCompatActivity() {
             viewModel.loadCurrencyList()
         })
     }
+
+
+    private inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(aClass: Class<T>): T = f() as T
+        }
 }

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.kuanyi.currencyexchange.ui.list.CurrencyListViewModel" />
+            type="com.kuanyi.currencyexchange.ui.quote.CurrencyQuoteViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,34 +18,45 @@
             android:id="@+id/editAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
             android:imeOptions="actionSearch"
-            android:inputType="numberSigned"
+            android:inputType="numberDecimal"
             android:padding="@dimen/spacing_8"
             android:textSize="@dimen/currency_quote_size"
-            tools:text="1.0"
-            android:gravity="end"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/default_amount" />
 
         <TextView
             android:id="@+id/txtQuoteHint"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editAmount"
             android:padding="@dimen/spacing_8"
             android:textSize="@dimen/currency_name_size"
-            tools:text="For 1.0 USD, you can exchange for..."/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editAmount"
+            tools:text="For 1.0 USD, you can exchange for..." />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtQuoteHint" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtQuoteHint"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
