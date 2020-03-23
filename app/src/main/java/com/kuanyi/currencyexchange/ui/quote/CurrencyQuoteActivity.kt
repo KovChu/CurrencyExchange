@@ -21,9 +21,6 @@ import kotlinx.android.synthetic.main.activity_currency_list.progressBar
 import kotlinx.android.synthetic.main.activity_currency_list.recyclerView
 import kotlinx.android.synthetic.main.activity_currency_quote.*
 
-
-
-//save instance state for edittext
 class CurrencyQuoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCurrencyQuoteBinding
@@ -33,11 +30,11 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         CurrencyQuoteAdapter()
 
     companion object {
-        val EXTRA_CURRENCY = "EXTRA_CURRENCY"
+        const val EXTRA_CURRENCY = "EXTRA_CURRENCY"
+        const val BUNDLE_AMOUNT = "BUNDLE_AMOUNT"
     }
 
     private lateinit var currency: String
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +74,10 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
-
-        editAmount.setOnEditorActionListener { v, actionId, event ->
+        if (savedInstanceState != null) {
+            editAmount.setText(savedInstanceState.getString(BUNDLE_AMOUNT))
+        }
+        editAmount.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 displayAmount(editAmount.text.toString().toDouble())
                 true
@@ -88,7 +87,12 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         }
     }
 
-    fun displayAmount(amount: Double) {
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(BUNDLE_AMOUNT, editAmount.text.toString())
+    }
+
+    private fun displayAmount(amount: Double) {
         txtQuoteHint.text = String.format(getString(R.string.txt_quote_amount), amount, currency)
         adapter.quoteInput = amount
     }
