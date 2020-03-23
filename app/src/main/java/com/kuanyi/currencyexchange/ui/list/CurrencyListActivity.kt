@@ -1,6 +1,7 @@
 package com.kuanyi.currencyexchange.ui.list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -57,6 +58,13 @@ class CurrencyListActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
+
+
+        adapter.onItemClick = { currency ->
+
+            // do something with your item
+            Log.d("data", currency.abbr)
+        }
     }
 
 

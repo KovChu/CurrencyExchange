@@ -11,6 +11,8 @@ class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyLis
 
     private var currencies: List<CurrencyModel> = emptyList()
 
+    var onItemClick: ((CurrencyModel) -> Unit)? = null
+
     private var quoteInput: Double = -1.0
         set(value) {
             //only support set that is positive
@@ -48,6 +50,14 @@ class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyLis
             ), parent, false
         )
     ) : RecyclerView.ViewHolder(binding.root) {
+
+
+
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(currencies[adapterPosition])
+            }
+        }
 
         fun bind(item: CurrencyModel) {
             binding.currency = item
