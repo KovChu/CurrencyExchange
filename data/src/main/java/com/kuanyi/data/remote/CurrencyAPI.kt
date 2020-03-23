@@ -8,11 +8,14 @@ import retrofit2.http.Query
 
 interface CurrencyAPI {
 
-    @GET("list")
-    suspend fun getCurrencyList(): Observable<CurrencyList>
+    @GET("/list")
+    fun getCurrencyList(
+        @Query("access_key") accessKey: String
+    ): Observable<CurrencyList>
 
-    @GET("live")
+    @GET("/live")
     fun getCurrencyQuote(
+        @Query("access_key") accessKey: String,
         @Query("source") source: String
     ): Observable<CurrencyQuotes>
 }

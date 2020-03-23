@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kuanyi.currencyexchange.component.DaggerViewModelComponent
 import com.kuanyi.currencyexchange.component.ViewModelComponent
+import com.kuanyi.currencyexchange.ui.list.CurrencyListViewModel
 import com.kuanyi.data.module.NetworkModule
 
 abstract class BaseLoadingViewModel : ViewModel() {
@@ -44,8 +45,7 @@ abstract class BaseLoadingViewModel : ViewModel() {
 
     private fun inject() {
         when (this) {
-//            is TimelineViewModel -> component.inject(this)
-//            is ProductListViewModel -> component.inject(this)
+            is CurrencyListViewModel -> component.inject(this)
         }
     }
 }
