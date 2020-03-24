@@ -42,7 +42,7 @@ dependencies {
     implementation "com.google.android.material:material:$versions.material"
     implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
     implementation "androidx.cardview:cardview:$versions.cardView"
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swipeRefreshLayout"
 
     // data binding
     kapt "com.android.databinding:compiler:$versions.dataBinding"
@@ -64,6 +64,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$versions.expresso_core"
 
     implementation project(':data')
-    implementation 'androidx.room:room-runtime:2.1.0'
-    annotationProcessor 'androidx.room:room-compiler:2.1.0'
+    implementation "androidx.room:room-runtime:$versions.room"
+    annotationProcessor "androidx.room:room-compiler:$versions.room"
 }
