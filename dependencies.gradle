@@ -15,6 +15,9 @@ versions.material = '1.1.0'
 versions.lifecycle = '1.1.1'
 versions.cardView = '1.0.0'
 
+//Database
+versions.room = "2.2.2"
+
 versions.dataBinding = '3.1.4'
 
 versions.dagger2 = '2.16'

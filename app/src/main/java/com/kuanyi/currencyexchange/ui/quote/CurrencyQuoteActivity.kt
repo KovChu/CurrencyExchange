@@ -13,10 +13,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.currencyexchange.databinding.ActivityCurrencyQuoteBinding
+import com.kuanyi.data.CurrencyDatabase
 import kotlinx.android.synthetic.main.activity_currency_quote.*
 
 class CurrencyQuoteActivity : AppCompatActivity() {
@@ -60,9 +62,9 @@ class CurrencyQuoteActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel =
-            ViewModelProviders.of(this, viewModelFactory { CurrencyQuoteViewModel(currency) })
-                .get(CurrencyQuoteViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, ViewModelFactory(this))
+            .get(CurrencyQuoteViewModel::class.java)
+
         binding.viewModel = viewModel
 
         viewModel.loadingStatus.observe(this, Observer {
@@ -168,8 +170,19 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         snackbar.show()
     }
 
-    private inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(aClass: Class<T>): T = f() as T
+    class ViewModelFactory(private val activity: AppCompatActivity) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(CurrencyQuoteViewModel::class.java)) {
+                val db = Room.databaseBuilder(
+                    activity.applicationContext,
+                    CurrencyDatabase::class.java,
+                    "currency"
+                ).build()
+                @Suppress("UNCHECKED_CAST")
+                return CurrencyQuoteViewModel(db.currencyDao()) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+
         }
+    }
 }
