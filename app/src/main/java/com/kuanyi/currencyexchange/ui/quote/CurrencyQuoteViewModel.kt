@@ -73,9 +73,9 @@ class CurrencyQuoteViewModel(private val currencyDao: CurrencyDao) : BaseLoading
 
     private fun getDataFromStorage() {
         currencyDao.getCurrencyQuotes()
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { onLoadingStarted() }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { data -> onLoadingSuccess(data) },
                 {
