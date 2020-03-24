@@ -12,16 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.list.CurrencyListActivity"
-            android:label="@string/activity_list_name">
+            android:name=".ui.quote.CurrencyQuoteActivity"
+            android:label="@string/activity_quote_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.quote.CurrencyQuoteActivity"
-            android:label="@string/activity_quote_name">
         </activity>
     </application>
 

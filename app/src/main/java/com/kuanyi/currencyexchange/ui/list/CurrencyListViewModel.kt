@@ -6,6 +6,7 @@ import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.data.BuildConfig
 import com.kuanyi.data.model.CurrencyList
 import com.kuanyi.data.model.CurrencyModel
+import com.kuanyi.data.model.CurrencyQuotes
 import com.kuanyi.data.remote.CurrencyAPI
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -13,6 +14,8 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class CurrencyListViewModel : BaseLoadingViewModel() {
+
+    private var source: String = "USD"
 
     @Inject
     lateinit var currencyAPI: CurrencyAPI
@@ -25,20 +28,23 @@ class CurrencyListViewModel : BaseLoadingViewModel() {
         loadCurrencyList()
     }
 
+    fun setSource(source: String) {
+        this.source = source
+    }
+
     override fun onCleared() {
         super.onCleared()
         subscription.dispose()
     }
 
     fun loadCurrencyList() {
-        subscription = currencyAPI.getCurrencyList(BuildConfig.CurrencyLayerAPIKey)
+        subscription = currencyAPI.getCurrencyQuote()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .doOnSubscribe { onLoadingStarted() }
             .doOnTerminate { onLoadingFinished() }
-            .map { currencyList: CurrencyList ->
-                return@map currencyList.toCurrencyModelList()
-
+            .map { currencyQuote: CurrencyQuotes ->
+                return@map currencyQuote.convertCurrencyQuotes(source)
             }.subscribe(
                 { data -> onLoadingSuccess(data) },
                 {

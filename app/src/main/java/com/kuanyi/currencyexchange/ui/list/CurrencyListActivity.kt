@@ -63,9 +63,9 @@ class CurrencyListActivity : AppCompatActivity() {
 
         adapter.onItemClick = { currency ->
             Log.d("data", currency.abbr)
-            val intent = Intent(this, CurrencyQuoteActivity::class.java)
-            intent.putExtra(CurrencyQuoteActivity.EXTRA_CURRENCY, currency.abbr)
-            startActivity(intent)
+//            val intent = Intent(this, CurrencyQuoteActivity::class.java)
+//            intent.putExtra(CurrencyQuoteActivity.EXTRA_CURRENCY, currency.abbr)
+//            startActivity(intent)
         }
     }
 

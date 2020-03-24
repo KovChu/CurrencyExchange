@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kuanyi.currencyexchange.databinding.ItemCurrencyBinding
 import com.kuanyi.data.model.CurrencyModel
 
-class CurrencyQuoteAdapter : RecyclerView.Adapter<CurrencyQuoteAdapter.CurrencyQuoteViewHolder>() {
+class CurrencyQuoteAdapter(var currency: String) :
+    RecyclerView.Adapter<CurrencyQuoteAdapter.CurrencyQuoteViewHolder>() {
 
     private var currencies: List<CurrencyModel> = emptyList()
 
@@ -18,6 +19,19 @@ class CurrencyQuoteAdapter : RecyclerView.Adapter<CurrencyQuoteAdapter.CurrencyQ
                 notifyDataSetChanged()
             }
         }
+
+    var baseRate = 1.0
+
+    fun changeCurrency(newCurrency: String) {
+        currency = newCurrency
+        for (model in currencies) {
+            if (model.abbr == currency) {
+                baseRate = model.rate
+                break
+            }
+        }
+    }
+
 
     fun setCurrencyList(currencies: List<CurrencyModel>) {
         this.currencies = currencies
@@ -48,7 +62,7 @@ class CurrencyQuoteAdapter : RecyclerView.Adapter<CurrencyQuoteAdapter.CurrencyQ
 
         fun bind(item: CurrencyModel) {
             binding.currency = item
-            binding.txtQuote.text = "%.2f".format(item.rate * quoteInput)
+            binding.txtQuote.text = "%.2f".format((item.rate / baseRate) * quoteInput)
             binding.txtName.text = item.abbr
             binding.executePendingBindings()
         }

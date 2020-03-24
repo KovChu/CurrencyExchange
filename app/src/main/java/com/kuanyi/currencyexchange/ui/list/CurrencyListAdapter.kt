@@ -52,8 +52,6 @@ class CurrencyListAdapter : RecyclerView.Adapter<CurrencyListAdapter.CurrencyLis
 
         fun bind(currency: CurrencyModel) {
             binding.currency = currency
-            binding.txtName.text = "${currency.name} (${currency.abbr})"
-            binding.txtQuote.visibility = View.GONE
             binding.executePendingBindings()
         }
 

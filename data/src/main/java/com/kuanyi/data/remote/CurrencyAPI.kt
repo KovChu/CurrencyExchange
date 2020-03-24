@@ -1,20 +1,16 @@
 package com.kuanyi.data.remote
 
+import com.kuanyi.data.BuildConfig
 import com.kuanyi.data.model.CurrencyList
 import com.kuanyi.data.model.CurrencyQuotes
 import io.reactivex.Observable
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface CurrencyAPI {
 
-    @GET("/list")
-    fun getCurrencyList(
-        @Query("access_key") accessKey: String
-    ): Observable<CurrencyList>
+    @GET("/list?access_key=${BuildConfig.CurrencyLayerAPIKey}")
+    fun getCurrencyList(): Observable<CurrencyList>
 
-    @GET("/live")
-    fun getCurrencyQuote(
-        @Query("access_key") accessKey: String
-    ): Observable<CurrencyQuotes>
+    @GET("/live?access_key=${BuildConfig.CurrencyLayerAPIKey}")
+    fun getCurrencyQuote(): Observable<CurrencyQuotes>
 }

@@ -13,13 +13,10 @@ data class CurrencyQuotes(
 
     fun convertCurrencyQuotes(source: String): List<CurrencyModel> {
         val currencyList = mutableListOf<CurrencyModel>()
-        //use USD as default rate and convert it
-        val currencyRate = quotes.get("USD${source}").asDouble
         for (abbr in quotes.keySet()) {
             val currency = abbr.removePrefix("USD")
             if (currency != source) {
-                val rate = quotes.get(abbr).asDouble
-                currencyList.add(CurrencyModel(currency, "", rate / currencyRate))
+                currencyList.add(CurrencyModel(currency, quotes.get(abbr).asDouble))
             }
         }
         return currencyList

@@ -3,6 +3,8 @@ package com.kuanyi.currencyexchange.ui.quote
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -11,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.currencyexchange.databinding.ActivityCurrencyQuoteBinding
@@ -26,22 +28,23 @@ class CurrencyQuoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCurrencyQuoteBinding
     private lateinit var viewModel: CurrencyQuoteViewModel
 
+    private var currency: String = "USD"
+
+    private val COLUMN_COUNT = 2
+
     private var adapter =
-        CurrencyQuoteAdapter()
+        CurrencyQuoteAdapter(currency)
 
     companion object {
-        const val EXTRA_CURRENCY = "EXTRA_CURRENCY"
+        const val BUNDLE_CURRENCY = "BUNDLE_CURRENCY"
         const val BUNDLE_AMOUNT = "BUNDLE_AMOUNT"
     }
-
-    private lateinit var currency: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency_list)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_currency_quote)
-        currency = intent.getStringExtra(EXTRA_CURRENCY)
         viewModel =
             ViewModelProviders.of(this, viewModelFactory { CurrencyQuoteViewModel(currency) })
                 .get(CurrencyQuoteViewModel::class.java)
@@ -60,18 +63,50 @@ class CurrencyQuoteActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.currencyList.observe(this, Observer {
+        viewModel.quoteList.observe(this, Observer {
             adapter.setCurrencyList(it)
             displayAmount(editAmount.text.toString().toDouble())
         })
 
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
+        viewModel.currencyList.observe(this, Observer {
+            ArrayAdapter<CharSequence>(
                 this,
-                DividerItemDecoration.VERTICAL
+                android.R.layout.simple_spinner_item,
+                it
+            ).also { spinnerAdapter ->
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerCurrency.adapter = spinnerAdapter
+                spinnerCurrency.setSelection(spinnerAdapter.getPosition(currency))
+                spinnerCurrency.onItemSelectedListener =
+                    object : AdapterView.OnItemSelectedListener {
+                        override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            p2: Int,
+                            p3: Long
+                        ) {
+                            currency = spinnerAdapter.getItem(p2).toString()
+                            adapter.changeCurrency(currency)
+                            displayAmount(editAmount.text.toString().toDouble())
+                        }
+
+
+                    }
+
+            }
+        })
+
+        recyclerView.layoutManager = GridLayoutManager(this, COLUMN_COUNT)
+        recyclerView.addItemDecoration(
+            GridSpacingItemDecorator(
+                COLUMN_COUNT,
+                resources.getDimensionPixelSize(R.dimen.spacing_8),
+                false
             )
         )
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
         savedInstanceState?.let {
@@ -90,6 +125,7 @@ class CurrencyQuoteActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(BUNDLE_AMOUNT, editAmount.text.toString())
+        outState.putString(BUNDLE_CURRENCY, currency)
     }
 
     private fun displayAmount(amount: Double) {
