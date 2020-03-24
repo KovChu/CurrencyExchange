@@ -74,8 +74,8 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
-        if (savedInstanceState != null) {
-            editAmount.setText(savedInstanceState.getString(BUNDLE_AMOUNT))
+        savedInstanceState?.let {
+            editAmount.setText(it.getString(BUNDLE_AMOUNT))
         }
         editAmount.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
