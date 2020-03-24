@@ -3,6 +3,7 @@ package com.kuanyi.currencyexchange.ui.quote
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.databinding.ItemCurrencyBinding
 import com.kuanyi.data.model.CurrencyModel
 
@@ -64,7 +65,8 @@ class CurrencyQuoteAdapter() :
 
         fun bind(item: CurrencyModel) {
             binding.currency = item
-            binding.txtQuote.text = "%.2f".format((item.rate / baseRate) * quoteInput)
+            binding.txtQuote.text = binding.root.context.getString(R.string.quote_format)
+                .format((item.rate / baseRate) * quoteInput)
             binding.txtName.text = item.abbr
             binding.executePendingBindings()
         }

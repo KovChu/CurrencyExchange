@@ -42,6 +42,7 @@ dependencies {
     implementation "com.google.android.material:material:$versions.material"
     implementation "android.arch.lifecycle:extensions:$versions.lifecycle"
     implementation "androidx.cardview:cardview:$versions.cardView"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
     // data binding
     kapt "com.android.databinding:compiler:$versions.dataBinding"

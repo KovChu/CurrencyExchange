@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.currencyexchange.databinding.ActivityCurrencyQuoteBinding
-import com.kuanyi.currencyexchange.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_currency_quote.*
 
 class CurrencyQuoteActivity : AppCompatActivity() {
@@ -26,8 +26,7 @@ class CurrencyQuoteActivity : AppCompatActivity() {
 
     private var currency: String = "AED"
 
-    private var adapter =
-        CurrencyQuoteAdapter()
+    private var adapter = CurrencyQuoteAdapter()
 
     companion object {
         const val BUNDLE_CURRENCY = "BUNDLE_CURRENCY"
@@ -39,6 +38,28 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_currency_quote)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_currency_quote)
+
+        setupViewModel()
+
+        setupRecyclerView()
+
+        savedInstanceState?.let {
+            editAmount.setText(it.getString(BUNDLE_AMOUNT))
+            currency = it.getString(BUNDLE_CURRENCY).toString()
+        }
+
+        setupAmountText()
+
+        setupRefreshView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(BUNDLE_AMOUNT, editAmount.text.toString())
+        outState.putString(BUNDLE_CURRENCY, currency)
+    }
+
+    private fun setupViewModel() {
         viewModel =
             ViewModelProviders.of(this, viewModelFactory { CurrencyQuoteViewModel(currency) })
                 .get(CurrencyQuoteViewModel::class.java)
@@ -47,9 +68,9 @@ class CurrencyQuoteActivity : AppCompatActivity() {
         viewModel.loadingStatus.observe(this, Observer {
             when (it) {
                 BaseLoadingViewModel.LoadingStatus.STARTED ->
-                    progressBar.visibility = View.VISIBLE
+                    swipeRefreshLayout.isRefreshing = true
                 BaseLoadingViewModel.LoadingStatus.FINISHED ->
-                    progressBar.visibility = View.GONE
+                    swipeRefreshLayout.isRefreshing = false
                 BaseLoadingViewModel.LoadingStatus.ERROR ->
                     displayError()
                 else -> {
@@ -90,7 +111,9 @@ class CurrencyQuoteActivity : AppCompatActivity() {
 
             }
         })
+    }
 
+    private fun setupRecyclerView() {
         val column = calculateColumnCount()
         recyclerView.layoutManager = GridLayoutManager(this, column)
         recyclerView.addItemDecoration(
@@ -103,9 +126,13 @@ class CurrencyQuoteActivity : AppCompatActivity() {
 
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
-        savedInstanceState?.let {
-            editAmount.setText(it.getString(BUNDLE_AMOUNT))
-        }
+    }
+
+    private fun calculateColumnCount(): Int {
+        return (resources.displayMetrics.widthPixels / resources.getDimensionPixelSize(R.dimen.currency_list_item_width))
+    }
+
+    private fun setupAmountText() {
         editAmount.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 displayAmount(editAmount.text.toString().toDouble())
@@ -117,26 +144,28 @@ class CurrencyQuoteActivity : AppCompatActivity() {
     }
 
 
-    private fun calculateColumnCount(): Int {
-        return (resources.displayMetrics.widthPixels / resources.getDimensionPixelSize(R.dimen.currency_list_item_width))
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(BUNDLE_AMOUNT, editAmount.text.toString())
-        outState.putString(BUNDLE_CURRENCY, currency)
-    }
-
     private fun displayAmount(amount: Double) {
         txtQuoteHint.text = String.format(getString(R.string.txt_quote_amount), amount, currency)
         adapter.quoteInput = amount
     }
 
+    private fun setupRefreshView() {
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.loadCurrencyList()
+        }
+    }
+
 
     private fun displayError() {
-        ViewUtils.showErrorSnackbar(root_layout, View.OnClickListener {
+        val snackbar = Snackbar.make(
+            root_layout,
+            getText(R.string.txt_loading_error),
+            Snackbar.LENGTH_INDEFINITE
+        )
+        snackbar.setAction(getText(R.string.btn_retry)) {
             viewModel.loadCurrencyList()
-        })
+        }
+        snackbar.show()
     }
 
     private inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
