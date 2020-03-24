@@ -11,13 +11,11 @@ data class CurrencyQuotes(
     val quotes: JsonObject
 ) : BaseResponse {
 
-    fun convertCurrencyQuotes(source: String): List<CurrencyModel> {
+    fun convertCurrencyQuotes(): List<CurrencyModel> {
         val currencyList = mutableListOf<CurrencyModel>()
         for (abbr in quotes.keySet()) {
             val currency = abbr.removePrefix("USD")
-            if (currency != source) {
-                currencyList.add(CurrencyModel(currency, quotes.get(abbr).asDouble))
-            }
+            currencyList.add(CurrencyModel(currency, quotes.get(abbr).asDouble))
         }
         return currencyList
     }

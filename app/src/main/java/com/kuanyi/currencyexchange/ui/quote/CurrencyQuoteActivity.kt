@@ -12,15 +12,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kuanyi.currencyexchange.R
 import com.kuanyi.currencyexchange.base.BaseLoadingViewModel
 import com.kuanyi.currencyexchange.databinding.ActivityCurrencyQuoteBinding
 import com.kuanyi.currencyexchange.utils.ViewUtils
-import kotlinx.android.synthetic.main.activity_currency_list.*
-import kotlinx.android.synthetic.main.activity_currency_list.progressBar
-import kotlinx.android.synthetic.main.activity_currency_list.recyclerView
 import kotlinx.android.synthetic.main.activity_currency_quote.*
 
 class CurrencyQuoteActivity : AppCompatActivity() {
@@ -28,12 +24,10 @@ class CurrencyQuoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCurrencyQuoteBinding
     private lateinit var viewModel: CurrencyQuoteViewModel
 
-    private var currency: String = "USD"
-
-    private val COLUMN_COUNT = 2
+    private var currency: String = "AED"
 
     private var adapter =
-        CurrencyQuoteAdapter(currency)
+        CurrencyQuoteAdapter()
 
     companion object {
         const val BUNDLE_CURRENCY = "BUNDLE_CURRENCY"
@@ -42,7 +36,7 @@ class CurrencyQuoteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_currency_list)
+        setContentView(R.layout.activity_currency_quote)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_currency_quote)
         viewModel =
@@ -76,7 +70,6 @@ class CurrencyQuoteActivity : AppCompatActivity() {
             ).also { spinnerAdapter ->
                 spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinnerCurrency.adapter = spinnerAdapter
-                spinnerCurrency.setSelection(spinnerAdapter.getPosition(currency))
                 spinnerCurrency.onItemSelectedListener =
                     object : AdapterView.OnItemSelectedListener {
                         override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -98,10 +91,11 @@ class CurrencyQuoteActivity : AppCompatActivity() {
             }
         })
 
-        recyclerView.layoutManager = GridLayoutManager(this, COLUMN_COUNT)
+        val column = calculateColumnCount()
+        recyclerView.layoutManager = GridLayoutManager(this, column)
         recyclerView.addItemDecoration(
             GridSpacingItemDecorator(
-                COLUMN_COUNT,
+                column,
                 resources.getDimensionPixelSize(R.dimen.spacing_8),
                 false
             )
@@ -120,6 +114,11 @@ class CurrencyQuoteActivity : AppCompatActivity() {
                 false
             }
         }
+    }
+
+
+    private fun calculateColumnCount(): Int {
+        return (resources.displayMetrics.widthPixels / resources.getDimensionPixelSize(R.dimen.currency_list_item_width))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

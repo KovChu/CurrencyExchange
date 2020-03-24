@@ -39,7 +39,7 @@ class CurrencyQuoteViewModel(private val source: String) : BaseLoadingViewModel(
             .doOnSubscribe { onLoadingStarted() }
             .doOnTerminate { onLoadingFinished() }
             .map { currencyQuote: CurrencyQuotes ->
-                return@map currencyQuote.convertCurrencyQuotes(source)
+                return@map currencyQuote.convertCurrencyQuotes()
             }.subscribe(
                 { data -> onLoadingSuccess(data) },
                 {

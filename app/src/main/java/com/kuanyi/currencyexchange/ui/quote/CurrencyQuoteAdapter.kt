@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kuanyi.currencyexchange.databinding.ItemCurrencyBinding
 import com.kuanyi.data.model.CurrencyModel
 
-class CurrencyQuoteAdapter(var currency: String) :
+class CurrencyQuoteAdapter() :
     RecyclerView.Adapter<CurrencyQuoteAdapter.CurrencyQuoteViewHolder>() {
 
     private var currencies: List<CurrencyModel> = emptyList()
@@ -21,6 +21,8 @@ class CurrencyQuoteAdapter(var currency: String) :
         }
 
     var baseRate = 1.0
+
+    private lateinit var currency: String
 
     fun changeCurrency(newCurrency: String) {
         currency = newCurrency

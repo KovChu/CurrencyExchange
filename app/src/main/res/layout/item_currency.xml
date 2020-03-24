@@ -15,7 +15,8 @@
         android:layout_width="@dimen/currency_list_item_width"
         android:layout_height="@dimen/currency_list_item_height"
         card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp">
+        card_view:cardElevation="4dp"
+        android:layout_marginBottom="@dimen/spacing_8">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
